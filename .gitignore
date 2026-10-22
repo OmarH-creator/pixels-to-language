@@ -1,0 +1,19 @@
+# Dataset folders
+CUB_200_2011/
+cvpr2016_cub/
+segmentations/
+
+# Compressed files
+*.zip
+*.rar
+
+# Trained models and experiment logs
+*.pt
+*.pth
+mlruns/
+
+# Temporary Python files
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
