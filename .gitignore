@@ -11,6 +11,7 @@ segmentations/
 *.pt
 *.pth
 mlruns/
+outputs/
 
 # Temporary Python files
 __pycache__/
