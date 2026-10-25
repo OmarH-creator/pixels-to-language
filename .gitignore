@@ -2,6 +2,7 @@
 CUB_200_2011/
 cvpr2016_cub/
 segmentations/
+classification_data*/
 
 # Compressed files
 *.zip
