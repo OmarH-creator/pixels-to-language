@@ -15,15 +15,22 @@ print(f"Using device: {device}")
 
 # 2. Image Transformations
 # These tell PyTorch how to prepare each raw image before feeding it to the model
-transform = transforms.Compose([
+# Training gets random augmentations so the model learns general bird features
+train_transform = transforms.Compose([
+    transforms.RandomCrop(224, padding=16),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.ColorJitter(brightness=0.15, contrast=0.15),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
-
+# Validation stays clean (no random flips or crops during the exam!)
+val_transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
 # 3. Load the Data using ImageFolder
-# (This points to the folders Member 1's script will create)
-train_dataset = datasets.ImageFolder("classification_data/train", transform=transform)
-val_dataset   = datasets.ImageFolder("classification_data/val", transform=transform)
+train_dataset = datasets.ImageFolder("classification_data/train", transform=train_transform)
+val_dataset   = datasets.ImageFolder("classification_data/val", transform=val_transform)
 
 # 4. DataLoaders (The batch dispensers)
 # Neural networks don't look at 1 image at a time (too slow),
@@ -57,6 +64,11 @@ criterion = nn.CrossEntropyLoss()
 # AdamW is an improved version of Adam with proper weight decay (L2 regularization).
 # lr=0.001 is the step size. weight_decay=1e-4 prevents weights from growing too large.
 optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+num_epochs = 15  # 15 epochs (~2.5 mins on GPU) to see the curve develop
+
+# 7b. Learning Rate Scheduler
+# Smoothly cools down the learning rate from 1e-3 to 1e-5 over the epochs
+scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs, eta_min=1e-5)
 
 # //////////////////////////////////////////////////////////////////////////////////////
 # //////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +76,8 @@ optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
 # //////////////////////////////////////////////////////////////////////////////////////
 # //////////////////////////////////////////////////////////////////////////////////////
 # //////////////////////////////////////////////////////////////////////////////////////
+
+
 
 # 8. Lists to record history for our visualization curves
 history = {
@@ -73,7 +87,6 @@ history = {
     "val_acc": []
 }
 
-num_epochs = 5  # Start with 5 epochs to verify everything works end-to-end
 
 print("\nStarting Training...")
 print("=" * 65)
@@ -135,6 +148,8 @@ for epoch in range(1, num_epochs + 1):
     epoch_val_loss = val_running_loss / total_val
     epoch_val_acc = (correct_val / total_val) * 100.0
 
+        # Update the learning rate for the next epoch
+    scheduler.step()
     # Save to history
     history["train_loss"].append(epoch_train_loss)
     history["train_acc"].append(epoch_train_acc)
