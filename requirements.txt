@@ -1,5 +1,19 @@
-Pillow==11.3.0
-matplotlib
-torch
-torchvision
-ipykernel
+# Core Deep Learning Framework
+torch>=2.2.0
+torchvision>=0.17.0
+
+# Data & Image Processing
+pillow>=10.0.0
+numpy>=1.24.0
+datasets>=2.18.0
+
+# Visualization & Metrics
+matplotlib>=3.8.0
+scikit-learn>=1.4.0
+
+# Experiment Tracking (Section 5.7)
+wandb>=0.16.0
+
+# CLI and Configuration (Section 5.2 & 5.3)
+pyyaml>=6.0.1
+tqdm>=4.66.0
