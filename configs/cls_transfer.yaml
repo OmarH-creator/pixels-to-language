@@ -1,0 +1,9 @@
+# python -m src.cli train --task classification --config configs/cls_transfer.yaml
+# backbone can be resnet18, resnet34, or resnet50.
+
+data_dir: classification_data
+backbone: resnet18
+epochs: 10
+batch_size: 32
+learning_rate: 0.001
+output_dir: outputs/classification

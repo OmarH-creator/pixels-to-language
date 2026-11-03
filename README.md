@@ -102,40 +102,70 @@ python -m src.visualization.gradcam
 
 ---
 
-## 5. Model Architecture Summary
+## 5. Evaluation & Transfer Learning
+
+### Evaluate the From-Scratch Model:
+```bash
+python -m src.evaluation.Evaluate_test
+python -m src.evaluation.Evaluate_nobox
+```
+
+### Transfer-Learning Classification (ResNet-18 / 34 / 50):
+Train a pretrained ResNet using the CLI (`configs/cls_transfer.yaml` chooses `resnet18`, `resnet34`, or `resnet50`):
+```bash
+python -m src.cli train --task classification --config configs/cls_transfer.yaml
+```
+
+Predict a single image with a saved checkpoint:
+```bash
+python -m src.cli predict --task classification --image path/to/bird.jpg --checkpoint outputs/classification/resnet18/best.pt
+```
+
+---
+
+## 6. Model Architecture Summary
 
 | Model File | Class Name | Architecture Summary | Parameters |
 | :--- | :--- | :--- | :--- |
 | `src/models/baseline_cnn_v1.py` | `BaselineCNN_V1` | 4-Stage plain CNN, single conv per stage, MaxPool | ~440K |
 | `src/models/baseline_cnn_v2_residual.py` | `BaselineCNN_V2_Residual` | 5-Stage residual CNN, double convs per stage, 512 max channels | ~5.0M |
 | `src/models/baseline_cnn_v3_resnet18.py` | `BaselineCNN_V3_ResNet18` | 18 weighted layers, ResNet-18 basic blocks, stride-2 downsampling | ~2.85M |
+| `src/models/baseline_cnn.py` | `BaselineCNN` | 25-Layer 5-Stage Residual CNN (`[2,2,3,3,2]` blocks) + Spatial Attention Pooling | ~12.8M |
+| `src/models/transfer.py` | `build_model` | ImageNet-pretrained ResNet-18 / 34 / 50 with 200-class head | ~11.3M (ResNet-18) |
 
 ---
 
-## 6. Repository Layout
+## 7. Repository Layout
 
 ```text
 pixels-to-language/
-├── configs/                                  # Hyperparameters & run settings
-├── notebooks/                                # Exploratory scratchpads (experiments only)
-├── outputs/                                  # Experiment artifacts (gitignored)
-│   ├── checkpoints/                          # Saved model weights (.pth)
-│   ├── explainability_gradcam/               # Grad-CAM heatmap visualization grids
-│   └── training_curves/                      # Training vs. validation loss/accuracy plots
+├── configs/                                  # Hyperparameters & run settings (cls_transfer.yaml)
+├── notebooks/                                # Exploratory notebooks (EDA.ipynb, transfer_learning.ipynb)
+├── outputs/                                  # Experiment artifacts, logs & plots
 ├── src/
 │   ├── data/                                 # Preprocessing and dataset pipelines
 │   │   ├── preprocess.py
-│   │   └── clean_captions.py
-│   ├── models/                               # CNN encoder architectures
+│   │   ├── clean_captions.py
+│   │   └── dataset.py
+│   ├── evaluation/                           # Evaluation & metrics scripts
+│   │   ├── Evaluate_test.py
+│   │   ├── Evaluate_nobox.py
+│   │   └── metrics.py
+│   ├── models/                               # From-scratch & transfer learning architectures
+│   │   ├── baseline_cnn.py
 │   │   ├── baseline_cnn_v1.py
 │   │   ├── baseline_cnn_v2_residual.py
-│   │   └── baseline_cnn_v3_resnet18.py
-│   ├── training/                             # Training loop & checkpoint logic
-│   │   └── train.py
+│   │   ├── baseline_cnn_v3_resnet18.py
+│   │   └── transfer.py
+│   ├── training/                             # Training loops
+│   │   ├── train.py
+│   │   └── trainer.py
 │   ├── visualization/                        # Explainability & plotting tools
-│   │   └── gradcam.py
+│   │   ├── gradcam.py
+│   │   └── curves.py
 │   └── cli.py                                # Command line interface entry point
-├── MILESTONE_1_MASTER_GUIDE.md               # Detailed technical & oral exam documentation
+├── PREPROCESSING.md                          # Data & caption preprocessing guide
 ├── requirements.txt                          # Python package dependencies
 └── README.md                                 # Environment setup & replication guide
 ```
+
