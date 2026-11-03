@@ -1,0 +1,6 @@
+Epochs: 400
+Best val accuracy: 69.58% at epoch 389
+Final val accuracy: 69.42%
+Final val loss: 1.7396
+Final train accuracy: 69.81%
+Saved: 2026-11-03 05:42:45

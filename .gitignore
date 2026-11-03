@@ -11,4 +11,10 @@ segmentations/
 prepared_data*/
 classification_data*/
 cub_preparing_*/
-outputs/
+
+*.pt
+outputs/baseline/
+outputs/classification/
+outputs/transfer_learning_backup_*/
+outputs/training_curves.png
+outputs/watcher_log.txt
