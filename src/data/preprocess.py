@@ -1,13 +1,15 @@
-# Put CUB_200_2011 in the repository folder.
-# Run from that folder: python -m src.data.preprocess
+# Classification preparation based on EDA. Run: python -m src.data.preprocess
 from pathlib import Path
 import random
 from PIL import Image
 
 project = Path(__file__).resolve().parents[2]
 source = project / "CUB_200_2011"
-output = project / "classification_data"
-image_size = 224
+##########################################################################
+# SQUARE CROP: new output folder, so the older images stay as they are
+output = project / "classification_data_square_288"
+image_size = 288
+##########################################################################
 validation_per_species = 6
 seed = 42
 
@@ -25,6 +27,15 @@ with open(source / "train_test_split.txt") as file:
     split_lines = file.readlines()
 if len(image_lines) != len(split_lines):
     raise ValueError("The metadata files have different numbers of images.")
+
+##########################################################################
+# BIRD CROP: read the box around the bird for each image
+with open(source / "bounding_boxes.txt") as file:
+    box_lines = file.readlines()
+box_of = {}
+for image_line, box_line in zip(image_lines, box_lines):
+    box_of[image_line.split()[1]] = [float(n) for n in box_line.split()[1:]]
+##########################################################################
 
 training = {}
 files = {"train": [], "val": [], "test": []}
@@ -66,6 +77,16 @@ for split, filenames in files.items():
         destination.parent.mkdir(parents=True, exist_ok=True)
         with Image.open(source / "images" / filename) as image:
             image = image.convert("RGB")
+            ##########################################################################
+            # SQUARE CROP: real pixels only, so no black bars and no squeezing
+            x, y, w, h = box_of[filename]
+            # 1.3x the bird's longer side, but never bigger than the photo's short side
+            side = min(1.3 * max(w, h), image.width, image.height)
+            # Centre the square on the bird, then slide it back inside the photo
+            left = min(max(0, x + w / 2 - side / 2), image.width - side)
+            top = min(max(0, y + h / 2 - side / 2), image.height - side)
+            image = image.crop((left, top, left + side, top + side))
+            ##########################################################################
             image = image.resize((image_size, image_size), Image.Resampling.BILINEAR)
             image.save(destination, quality=95)
     print(split, "images:", len(filenames), flush=True)
