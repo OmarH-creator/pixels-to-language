@@ -1,21 +1,23 @@
-# Dataset folders
-CUB_200_2011/
-cvpr2016_cub/
-segmentations/
-classification_data*/
-
-# Compressed files
-*.zip
-*.rar
-
-# Trained models and experiment logs
-*.pt
-*.pth
-mlruns/
-outputs/
-
-# Temporary Python files
 __pycache__/
 *.pyc
 .venv/
-.ipynb_checkpoints/
+venv/
+.idea/
+
+# Downloaded datasets and generated training data.
+CUB_200_2011/
+cvpr2016_cub/
+segmentations/
+prepared_data*/
+classification_data*/
+cub_preparing_*/
+archive/
+outputs/
+*.zip
+
+*.pt
+outputs/baseline/
+outputs/classification/
+outputs/transfer_learning_backup_*/
+outputs/training_curves.png
+outputs/watcher_log.txt

@@ -1,5 +1,4 @@
-# Put cvpr2016_cub in the repository folder.
-# After preprocessing, run: python -m src.data.clean_captions
+# Optional caption cleaning based on EDA. Run: python -m src.data.clean_captions
 from pathlib import Path
 
 project = Path(__file__).resolve().parents[2]

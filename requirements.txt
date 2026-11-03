@@ -1,6 +1,6 @@
 Pillow==11.3.0
-matplotlib
 torch
 torchvision
-ipykernel
+matplotlib
 pyyaml
+
