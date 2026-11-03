@@ -10,7 +10,7 @@ python -m pip install -r requirements.txt
 ## Classification now
 
 ```powershell
-python preprocess.py
+python -m src.data.preprocess
 ```
 
 This short script applies the image findings from EDA:
@@ -52,10 +52,10 @@ normalization required by your chosen model happen in the training code.
 Run the separate caption script when cleaned captions are needed:
 
 ```powershell
-python clean_captions.py
+python -m src.data.clean_captions
 ```
 
-It uses the images selected by `preprocess.py`, so captions stay with the same
+It uses the images selected by `src/data/preprocess.py`, so captions stay with the same
 train/validation/test split and the removed image duplicate is excluded too.
 It reads UTF-8, repairs the 55 captions with the known doubled-character separator
 pattern, omits the one caption damaged inside a word and the two captions

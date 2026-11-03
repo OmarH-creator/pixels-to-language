@@ -11,6 +11,9 @@ segmentations/
 prepared_data*/
 classification_data*/
 cub_preparing_*/
+archive/
+outputs/
+*.zip
 
 *.pt
 outputs/baseline/

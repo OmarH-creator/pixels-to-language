@@ -1,5 +1,5 @@
 # Simple Grad-CAM: 8 correct and 8 wrong predictions.
-# Run from the project folder: C:\miniconda3\python.exe gradcam.py
+# Run from the project folder: python -m src.visualization.gradcam
 import os
 import random
 

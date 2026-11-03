@@ -1,9 +1,9 @@
-# Classification preparation based on EDA. Run: python preprocess.py
+# Classification preparation based on EDA. Run: python -m src.data.preprocess
 from pathlib import Path
 import random
 from PIL import Image
 
-project = Path(__file__).resolve().parent
+project = Path(__file__).resolve().parents[2]
 source = project / "CUB_200_2011"
 ##########################################################################
 # SQUARE CROP: new output folder, so the older images stay as they are

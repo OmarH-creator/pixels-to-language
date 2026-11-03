@@ -1,11 +1,11 @@
-# Optional caption cleaning based on EDA. Run after preprocess.py.
+# Optional caption cleaning based on EDA. Run: python -m src.data.clean_captions
 from pathlib import Path
 
-project = Path(__file__).resolve().parent
+project = Path(__file__).resolve().parents[2]
 source = project / "cvpr2016_cub" / "text_c10"
 dataset = project / "classification_data"
 if not (dataset / "complete.txt").is_file():
-    raise ValueError("Run preprocess.py successfully first.")
+    raise ValueError("Run python -m src.data.preprocess successfully first.")
 
 before = 0
 after = 0
